@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>English 8: Beginnings in Research, Literature, and composition - The Outsiders: Comparing Literary & Film Versions</title>
+  <title>English 8: Beginnings in Research, Literature, and Composition - The Outsiders: Comparing Literary & Film Versions</title>
   <style>
 :root {
   --primary: #15803d;
@@ -14,6 +14,10 @@
   --text-dark: #0f172a;
   --text-muted: #475569;
   --border: #cbd5e1;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -66,6 +70,7 @@ body {
   font-size: 0.95em;
   cursor: pointer;
   color: #334155;
+  transition: all 0.2s ease;
 }
 .tab-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
 
@@ -177,29 +182,102 @@ body {
   align-items: center;
 }
 
+/* Student Checkpoint Form Styling */
 .form-group {
-  margin-bottom: 22px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
 }
-label { font-weight: bold; margin-bottom: 6px; display: block; }
-input, textarea, select {
+
+.form-group label.field-label {
+  font-weight: 700;
+  font-size: 1.05em;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.field-subtext {
+  font-size: 0.93em;
+  color: #334155;
+  margin-bottom: 12px;
+  line-height: 1.45;
+}
+
+input[type="text"], input[type="date"], textarea, select {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid var(--border);
   border-radius: 6px;
+  background: #ffffff;
+  color: var(--text-dark);
+  font-size: 0.95em;
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input[type="text"]::placeholder, textarea::placeholder {
+  color: #94a3b8;
+}
+
+input[type="text"]:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+}
+
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.option-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+  color: var(--text-dark);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.option-label:hover {
+  background: #f0fdf4;
+  border-color: var(--primary);
+}
+
+.option-label input[type="radio"], .option-label input[type="checkbox"] {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
 }
 
 .submit-btn {
   width: 100%;
   background: var(--primary);
   color: white;
-  padding: 14px;
+  padding: 16px;
   font-size: 1.05em;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background: var(--primary-dark);
 }
 
 .tab-content { display: none; }
@@ -209,6 +287,17 @@ input, textarea, select {
 .italic { font-style: italic; }
 .subtitle { color: var(--text-muted); }
 
+/* Print Optimizations */
+@media print {
+  body { background-color: #fff; color: #000; padding: 0; }
+  .container { max-width: 100%; }
+  .nav-tabs, .deck-controls, .bellringer-box button, .submit-btn, .header-card { display: none !important; }
+  .tab-content { display: block !important; }
+  #deck-tab, #res-tab { display: none !important; }
+  #form-tab { display: block !important; box-shadow: none; border: none; padding: 0; }
+  .form-group { page-break-inside: avoid; border: 1px solid #ccc; background: #fff; }
+  input, textarea, select { border: 1px solid #999 !important; background: #fff !important; }
+}
 </style>
 </head>
 <body>
@@ -236,7 +325,7 @@ input, textarea, select {
 
   <!-- TABS -->
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('deck')">Deck</button>
+    <button class="tab-btn active" onclick="switchTab('deck')">Slide Deck</button>
     <button class="tab-btn" onclick="switchTab('res')">Resource Hub</button>
     <button class="tab-btn" onclick="switchTab('form')">Student Work Checkpoint</button>
   </div>
@@ -293,16 +382,16 @@ let bellringers = [];
 
 // Stock image pool for default visual slides
 const stockImagePool = [
-  'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80', // Turtle / Nature
-  'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80', // Water / Earth-Diver
-  'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=300&q=80', // Ecology / Forest
-  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&q=80', // Campfire / Orality
-  'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=300&q=80', // Literature / History
-  'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=300&q=80'  // Writing Workshop
+  'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=300&q=80',
+  'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=300&q=80'
 ];
 
 // Emoji fallback pool
-const iconPool = ['🐢', '🌊', '🌱', '🗣️', '☯️', '📝'];
+const iconPool = ['🎬', '📖', '🎭', '🎥', '💡', '📝'];
 
 function renderSlides(slides) {
   const stage = document.getElementById('slide-stage');
@@ -313,9 +402,7 @@ function renderSlides(slides) {
     wrapper.className = 'slide' + (index === 0 ? ' active' : '');
     wrapper.id = `slide-${index + 1}`;
 
-    // Priority 1: slide.image OR Stock Web Image
     const imageUrl = slide.image || stockImagePool[index % stockImagePool.length];
-    // Fallback: slide.icon OR Emoji Pool
     const fallbackEmoji = slide.icon || iconPool[index % iconPool.length];
 
     const visualMediaHTML = `
@@ -347,6 +434,7 @@ function renderSlides(slides) {
     stage.appendChild(wrapper);
   });
 }
+
 function initLesson(data) {
   bellringers = data.bellringers || [];
   totalSlides = (data.slides || []).length || 1;
@@ -388,12 +476,12 @@ function renderResources(resources) {
   if (Array.isArray(resources)) {
     resourceList = resources;
   } else if (resources && typeof resources === 'object') {
-    if (Array.isArray(resources.buttons)) {
+    if (Array.isArray(resources.items)) {
+      resourceList = resources.items;
+    } else if (Array.isArray(resources.buttons)) {
       resourceList = resources.buttons;
     } else if (Array.isArray(resources.files)) {
       resourceList = resources.files;
-    } else if (Array.isArray(resources.items)) {
-      resourceList = resources.items;
     } else if (resources.file || resources.link || resources.url) {
       resourceList = [resources];
     }
@@ -427,12 +515,11 @@ function renderResources(resources) {
     const resourceUrl = res.file || res.link || res.url || res.href || '#';
     const resourceTitle = res.title || res.name || res.label || 'Resource Item';
     const resourceDescription = res.description || res.summary || '';
-    const fileName = resourceUrl && typeof resourceUrl === 'string' ? resourceUrl.split('/').pop() : '';
 
     card.innerHTML = `
       <div>
-        <strong>${resourceTitle || fileName || 'Resource Item'}</strong><br/>
-        <small>${resourceDescription}</small>
+        <strong>${resourceTitle}</strong><br/>
+        <small class="muted">${resourceDescription}</small>
       </div>
       ${resourceUrl && resourceUrl !== '#' ? `<a href="${resourceUrl}" target="_blank" rel="noopener noreferrer" class="ctrl-btn">Open Resource</a>` : ''}
     `;
@@ -447,34 +534,51 @@ function renderForm(fields) {
 
   const fieldList = Array.isArray(fields) ? fields : [];
 
-  fieldList.forEach(field => {
+  fieldList.forEach((field, idx) => {
     const group = document.createElement('div');
     group.className = 'form-group';
 
-    const label = field.label || field.prompt || `Question ${field.field_id || ''}`.trim() || 'Question';
-    const id = `field_${(field.field_id || label).toString().replace(/\s+/g, '_').toLowerCase()}`;
+    const labelText = field.label || field.question || field.prompt || `Question ${field.field_id || field.id || (idx + 1)}`;
+    const id = `field_${(field.field_id || field.id || idx).toString().replace(/[^\w]/g, '_').toLowerCase()}`;
+    const placeholder = field.placeholder ? field.placeholder.replace(/"/g, '&quot;') : '';
 
+    let subtextHTML = field.subtext ? `<div class="field-subtext">${field.subtext}</div>` : '';
     let inputHTML = '';
-    if (field.type === 'short_answer' || field.type === 'short_text' || field.type === 'text') {
-      inputHTML = `<input type="text" id="${id}" ${field.required ? 'required' : ''} />`;
-    } else if (field.type === 'date') {
-      inputHTML = `<input type="date" id="${id}" ${field.required ? 'required' : ''} />`;
-    } else if (field.type === 'long_text' || field.type === 'quote_citation' || field.type === 'reflection') {
-      inputHTML = `<textarea id="${id}" rows="5" ${field.required ? 'required' : ''}></textarea>`;
-    } else if (field.type === 'multiple_choice' || field.type === 'true_false') {
-      const options = field.type === 'true_false' ? ['True', 'False'] : (field.options || []);
-      inputHTML = options.map((option, index) => `<label><input type="radio" id="${id}_${index}" name="${id}" value="${option}" ${field.required ? 'required' : ''} /> ${option}</label>`).join('<br/>');
-    } else if (field.type === 'checkbox') {
-      inputHTML = (field.options || []).map((option, index) => `<label><input type="checkbox" id="${id}_${index}" name="${id}" value="${option}" /> ${option}</label>`).join('<br/>');
-    } else if (field.type === 'rating_scale') {
-      inputHTML = `<select id="${id}">${(field.options || []).map(o => `<option>${o}</option>`).join('')}</select>`;
-    } else if (field.type === 'select_rubric') {
-      inputHTML = `<select id="${id}"><option>-- Select Rubric Benchmark Level --</option>${(field.options || []).map(o => `<option>${o}</option>`).join('')}</select>`;
-    } else if (field.type === 'checkbox_group' || field.type === 'multi_select') {
-      inputHTML = (field.options || []).map(o => `<label><input type="checkbox" name="${id}" value="${o}" /> ${o}</label>`).join('<br/>');
+
+    const type = (field.type || 'short_answer').toLowerCase();
+
+    if (type === 'short_answer' || type === 'short_text' || type === 'text' || type === 'fill_in_blank') {
+      inputHTML = `<input type="text" id="${id}" name="${id}" placeholder="${placeholder || 'Type your answer here...'}" ${field.required !== false ? 'required' : ''} />`;
+    } else if (type === 'date') {
+      inputHTML = `<input type="date" id="${id}" name="${id}" ${field.required !== false ? 'required' : ''} />`;
+    } else if (type === 'long_text' || type === 'quote_citation' || type === 'reflection') {
+      inputHTML = `<textarea id="${id}" name="${id}" rows="4" placeholder="${placeholder || 'Type your detailed response here...'}" ${field.required !== false ? 'required' : ''}></textarea>`;
+    } else if (type === 'multiple_choice' || type === 'true_false') {
+      const options = type === 'true_false' ? ['True', 'False'] : (field.options || []);
+      inputHTML = `<div class="option-list">` + options.map((option, index) => `
+        <label class="option-label">
+          <input type="radio" id="${id}_${index}" name="${id}" value="${option.replace(/"/g, '&quot;')}" ${field.required !== false ? 'required' : ''} />
+          <span>${option}</span>
+        </label>
+      `).join('') + `</div>`;
+    } else if (type === 'checkbox' || type === 'checkbox_group' || type === 'multi_select') {
+      const options = field.options || [];
+      inputHTML = `<div class="option-list">` + options.map((option, index) => `
+        <label class="option-label">
+          <input type="checkbox" id="${id}_${index}" name="${id}[]" value="${option.replace(/"/g, '&quot;')}" />
+          <span>${option}</span>
+        </label>
+      `).join('') + `</div>`;
+    } else if (type === 'rating_scale' || type === 'select_rubric') {
+      const options = field.options || [];
+      const promptMsg = type === 'select_rubric' ? '-- Select Rubric Benchmark Level --' : '-- Select Rating / Benchmark --';
+      inputHTML = `<select id="${id}" name="${id}" ${field.required !== false ? 'required' : ''}>
+        <option value="">${promptMsg}</option>
+        ${options.map(o => `<option value="${o.replace(/"/g, '&quot;')}">${o}</option>`).join('')}
+      </select>`;
     }
 
-    group.innerHTML = `<label for="${id}">${label}</label>${inputHTML}`;
+    group.innerHTML = `<label class="field-label" for="${id}">${labelText}</label>${subtextHTML}${inputHTML}`;
     form.appendChild(group);
   });
 
@@ -482,21 +586,170 @@ function renderForm(fields) {
 }
 
 function switchTab(key) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  const btns = document.querySelectorAll('.tab-btn');
+  const tabs = document.querySelectorAll('.tab-content');
+
+  btns.forEach(btn => btn.classList.remove('active'));
+  tabs.forEach(tab => tab.classList.remove('active'));
 
   if (key === 'deck') {
-    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    btns[0].classList.add('active');
     document.getElementById('deck-tab').classList.add('active');
   } else if (key === 'res') {
-    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    btns[1].classList.add('active');
     document.getElementById('res-tab').classList.add('active');
   } else if (key === 'form') {
-    document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    btns[2].classList.add('active');
     document.getElementById('form-tab').classList.add('active');
   }
 }
-window.addEventListener('DOMContentLoaded', () => initLesson({"day": 21, "date": "Sept 30 (Wednesday)", "course": "English 8: Beginning Studies in Research, Literature, and Composition", "unit": "Unit 5: Analyzing Narrative and Adaptation in Literature", "topic": "The Outsiders: Comparing Literary & Film Versions", "primary_focus": "Understanding how medium affects story interpretation.", "core_objectives": ["Evaluating directorial choices vs. authorial intent."], "standards": ["8.1.7.7", "8.1.2.2"], "bellringers": ["How does lighting or background music alter your emotional reaction to a scene compared to reading descriptive prose?", "Name one scene from S.E. Hinton's 'The Outsiders' that you expect Francis Ford Coppola to visually modify in the film adaptation.", "What is one structural advantage a novelist has over a film director when revealing a character's internal thoughts?", "Define 'authorial intent' in the context of literary adaptation."], "slides": [{"title": "Introduction to Medium and Adaptation", "standard": "8.1.7.7", "bullets": ["Literature relies on textual description and internal monologue to convey meaning.", "Film utilizes visual framing, auditory cues, and pacing to tell the same story.", "Analyzing adaptations requires comparing how different mediums affect audience interpretation."], "callout": "Shifting from page to screen changes how we perceive character motivations and tone."}, {"title": "Authorial Intent vs. Directorial Vision", "standard": "8.1.7.7", "bullets": ["S.E. Hinton crafted 'The Outsiders' to expose socio-economic divides among teenagers.", "Director Francis Ford Coppola translated Hinton's narrative into a visual cinematic style.", "Directorial choices can emphasize or alter the original themes established by the author."], "callout": "A director acts as an interpreter of the novel, making intentional choices to cut or add content."}, {"title": "Analyzing Scene Selection: What Stays and What Goes?", "standard": "8.1.7.7", "bullets": ["Film runtimes force directors to omit specific literary chapters and subplots.", "Scenes retained in adaptations signal key plot beats vital to character development.", "Cutting internal monologues requires actors to express internal conflict physically."], "callout": "Omitted novel scenes force us to evaluate whether essential thematic elements were preserved."}, {"title": "Cinematography and Visual Symbolism", "standard": "8.1.7.7", "bullets": ["Camera angles establish power dynamics between Greasers and Socs visually.", "Color palettes reinforce environmental mood, such as warm golden hues during sunset scenes.", "Close-up camera shots replace written character descriptions to show emotional depth."], "callout": "Cinematography translates Hinton's vivid adjectives into lighting, camera framing, and color."}, {"title": "Sound Design and Musical Score Impact", "standard": "8.1.7.7", "bullets": ["Diegetic sound grounds the scene in realistic environmental atmosphere.", "Non-diegetic music beds evoke immediate emotional responses from the viewer.", "Silence is strategically deployed to heighten narrative tension before pivotal events."], "callout": "Audio elements shape viewer empathy far faster than written narrative exposition."}, {"title": "Case Study: The Church Fire Scene (Text)", "standard": "8.1.2.2", "bullets": ["Hinton's text emphasizes Ponyboy and Johnny's selfless instincts through internal narration.", "Textual descriptions highlight physical heat, smoke, and moral transformation.", "Ponyboy realizes his identity transcends the 'Greaser' stereotype during the rescue."], "callout": "The written text establishes heroics as a central turning point in character growth."}, {"title": "Case Study: The Church Fire Scene (Film)", "standard": "8.1.7.7", "bullets": ["Coppola uses rapid editing cuts and dramatic lighting to create urgent pacing.", "Visual focus shifts from internal thoughts to external physical action and peril.", "Heroic orchestral music heightens the cinematic grandeur of Johnny's sacrifice."], "callout": "Film prioritizes kinetic action and immediate visual danger over internal reflection."}, {"title": "Character Depiction: Ponyboy Curtis On Page vs. Screen", "standard": "8.1.7.7", "bullets": ["The novel provides continuous access to Ponyboy's poetic inner reflections.", "The film relies on voiceover narration sparingly to convey internal thoughts.", "Performance choices by the actor convey sensitivity through facial expressions and body language."], "callout": "Without voiceover, film actors must convey internal literary conflict entirely through performance."}, {"title": "Evaluating Theme Retention in Adaptations", "standard": "8.1.2.2", "bullets": ["Theme development in literature builds incrementally through motif repetitions.", "Film adaptations must condense thematic motifs into prominent visual symbols.", "We must assess whether the core message of class empathy remains intact."], "callout": "A successful adaptation preserves the author's primary theme despite structural changes."}, {"title": "Using the Media Juxtaposition Fillable Matrix", "standard": "8.1.7.7", "bullets": ["Log specific textual passages alongside matching timestamped film clips.", "Identify changes in character dialogue, scene setting, and emotional tone.", "Evaluate whether each modification enhances or diminishes the narrative impact."], "callout": "Document concrete evidence from both media types before forming an evaluative claim."}, {"title": "Group Discussion: Success of the Adaptation", "standard": "8.1.7.7", "bullets": ["Compare group matrix notes on directorial omissions and visual alterations.", "Debate whether Coppola's artistic choices align with Hinton's original intent.", "Formulate a defensible judgment regarding the fidelity of the film adaptation."], "callout": "Defend your position using specific evidence from both Hinton's novel and Coppola's film."}, {"title": "Wrap-Up & Matrix Synthesis", "standard": "8.1.2.2", "bullets": ["Review key differences between literary prose and cinematic storytelling.", "Recognize how medium constraints influence narrative pace and character presentation.", "Prepare matrix observations to inform upcoming thematic essay drafting."], "callout": "Understanding medium adaptations deepens our ability to analyze authorial choices."}], "resources": "Media Juxtaposition Fillable Matrix", "form": [{"field_id": "q1", "label": "Which story element is easiest to convey in novel format compared to film?", "type": "multiple_choice", "options": ["Fast-paced physical action", "Detailed internal monologue", "Background sound effects", "Color palette visual atmosphere"], "correct_answer": "Detailed internal monologue"}, {"field_id": "q2", "label": "State standard 8.1.7.7 focus when analyzing a literary film adaptation.", "type": "short_answer", "prompt": "Explain what students evaluate when comparing a film adaptation to its original written text.", "correct_answer": "Students evaluate how directorial choices alter or preserve authorial intent, story elements, and tone."}, {"field_id": "q3", "label": "What cinematic technique replaces written adjective descriptions of a character's mood?", "type": "multiple_choice", "options": ["Lighting and camera angles", "Book chapter titles", "Page margin notes", "End credits"], "correct_answer": "Lighting and camera angles"}, {"field_id": "q4", "label": "True or False: A film adaptation must include every scene from the novel to be considered faithful.", "type": "true_false", "correct_answer": "False"}, {"field_id": "q5", "label": "How does diegetic sound differ from non-diegetic background score in film?", "type": "short_answer", "prompt": "Differentiate between diegetic sound and non-diegetic music in cinematic storytelling.", "correct_answer": "Diegetic sound exists within the story world (heard by characters); non-diegetic sound is added for the audience."}, {"field_id": "q6", "label": "In 'The Outsiders', how does the film depiction of the church fire alter pacing compared to the novel?", "type": "short_answer", "prompt": "Describe how pacing changes in the film version of the church rescue.", "correct_answer": "The film accelerates pacing through quick cuts and dramatic music, emphasizing external action over internal thought."}, {"field_id": "q7", "label": "Which resource is used today to record comparative observations between book and movie?", "type": "multiple_choice", "options": ["Media Juxtaposition Fillable Matrix", "Rhyme Scheme Worksheet", "Vocabulary Flashcards", "Grammar Rulebook"], "correct_answer": "Media Juxtaposition Fillable Matrix"}, {"field_id": "q8", "label": "Identify one reason a film director might choose to cut a novel character's subplot.", "type": "short_answer", "prompt": "Why might subplots be cut during film adaptations?", "correct_answer": "To fit runtime constraints and maintain focus on the main narrative arc."}, {"field_id": "q9", "label": "How does Ponyboy's voiceover narration in the film serve as a bridge to Hinton's written prose?", "type": "short_answer", "prompt": "Explain the purpose of voiceover in the film adaptation.", "correct_answer": "It provides direct literary excerpts of Ponyboy's internal thoughts to retain authorial voice."}, {"field_id": "q10", "label": "Standard 8.1.2.2 Alignment Check", "type": "short_answer", "prompt": "How does comparing text and film deepen understanding of theme development?", "correct_answer": "It highlights which core thematic messages remain vital across different storytelling mediums."}]}));
+
+window.addEventListener('DOMContentLoaded', () => initLesson({
+  "day": 21,
+  "date": "Sept 30 (Wednesday)",
+  "course": "English 8: Beginning Studies in Research, Literature, and Composition",
+  "unit": "Unit 5: Analyzing Narrative and Adaptation in Literature",
+  "topic": "The Outsiders: Comparing Literary & Film Versions",
+  "primary_focus": "Understanding how medium affects story interpretation.",
+  "core_objectives": ["Evaluating directorial choices vs. authorial intent."],
+  "standards": ["8.1.7.7", "8.1.2.2"],
+  "bellringers": [
+    "How does lighting or background music alter your emotional reaction to a scene compared to reading descriptive prose?",
+    "Name one scene from S.E. Hinton's 'The Outsiders' that you expect Francis Ford Coppola to visually modify in the film adaptation.",
+    "What is one structural advantage a novelist has over a film director when revealing a character's internal thoughts?",
+    "Define 'authorial intent' in the context of literary adaptation."
+  ],
+  "slides": [
+    {"title": "Introduction to Medium and Adaptation", "standard": "MN Standard 8.1.7.7", "bullets": ["Literature relies on textual description and internal monologue to convey meaning.", "Film utilizes visual framing, auditory cues, and pacing to tell the same story.", "Analyzing adaptations requires comparing how different mediums affect audience interpretation."], "callout": "Shifting from page to screen changes how we perceive character motivations and tone."},
+    {"title": "Authorial Intent vs. Directorial Vision", "standard": "MN Standard 8.1.7.7", "bullets": ["S.E. Hinton crafted 'The Outsiders' to expose socio-economic divides among teenagers.", "Director Francis Ford Coppola translated Hinton's narrative into a visual cinematic style.", "Directorial choices can emphasize or alter the original themes established by the author."], "callout": "A director acts as an interpreter of the novel, making intentional choices to cut or add content."},
+    {"title": "Analyzing Scene Selection: What Stays and What Goes?", "standard": "MN Standard 8.1.7.7", "bullets": ["Film runtimes force directors to omit specific literary chapters and subplots.", "Scenes retained in adaptations signal key plot beats vital to character development.", "Cutting internal monologues requires actors to express internal conflict physically."], "callout": "Omitted novel scenes force us to evaluate whether essential thematic elements were preserved."},
+    {"title": "Cinematography and Visual Symbolism", "standard": "MN Standard 8.1.7.7", "bullets": ["Camera angles establish power dynamics between Greasers and Socs visually.", "Color palettes reinforce environmental mood, such as warm golden hues during sunset scenes.", "Close-up camera shots replace written character descriptions to show emotional depth."], "callout": "Cinematography translates Hinton's vivid adjectives into lighting, camera framing, and color."},
+    {"title": "Sound Design and Musical Score Impact", "standard": "MN Standard 8.1.7.7", "bullets": ["Diegetic sound grounds the scene in realistic environmental atmosphere.", "Non-diegetic music beds evoke immediate emotional responses from the viewer.", "Silence is strategically deployed to heighten narrative tension before pivotal events."], "callout": "Audio elements shape viewer empathy far faster than written narrative exposition."},
+    {"title": "Case Study: The Church Fire Scene (Text)", "standard": "MN Standard 8.1.2.2", "bullets": ["Hinton's text emphasizes Ponyboy and Johnny's selfless instincts through internal narration.", "Textual descriptions highlight physical heat, smoke, and moral transformation.", "Ponyboy realizes his identity transcends the 'Greaser' stereotype during the rescue."], "callout": "The written text establishes heroics as a central turning point in character growth."},
+    {"title": "Case Study: The Church Fire Scene (Film)", "standard": "MN Standard 8.1.7.7", "bullets": ["Coppola uses rapid editing cuts and dramatic lighting to create urgent pacing.", "Visual focus shifts from internal thoughts to external physical action and peril.", "Heroic orchestral music heightens the cinematic grandeur of Johnny's sacrifice."], "callout": "Film prioritizes kinetic action and immediate visual danger over internal reflection."},
+    {"title": "Character Depiction: Ponyboy Curtis On Page vs. Screen", "standard": "MN Standard 8.1.7.7", "bullets": ["The novel provides continuous access to Ponyboy's poetic inner reflections.", "The film relies on voiceover narration sparingly to convey internal thoughts.", "Performance choices by the actor convey sensitivity through facial expressions and body language."], "callout": "Without voiceover, film actors must convey internal literary conflict entirely through performance."},
+    {"title": "Evaluating Theme Retention in Adaptations", "standard": "MN Standard 8.1.2.2", "bullets": ["Theme development in literature builds incrementally through motif repetitions.", "Film adaptations must condense thematic motifs into prominent visual symbols.", "We must assess whether the core message of class empathy remains intact."], "callout": "A successful adaptation preserves the author's primary theme despite structural changes."},
+    {"title": "Using the Media Juxtaposition Fillable Matrix", "standard": "MN Standard 8.1.7.7", "bullets": ["Log specific textual passages alongside matching timestamped film clips.", "Identify changes in character dialogue, scene setting, and emotional tone.", "Evaluate whether each modification enhances or diminishes the narrative impact."], "callout": "Document concrete evidence from both media types before forming an evaluative claim."},
+    {"title": "Group Discussion: Success of the Adaptation", "standard": "MN Standard 8.1.7.7", "bullets": ["Compare group matrix notes on directorial omissions and visual alterations.", "Debate whether Coppola's artistic choices align with Hinton's original intent.", "Formulate a defensible judgment regarding the fidelity of the film adaptation."], "callout": "Defend your position using specific evidence from both Hinton's novel and Coppola's film."},
+    {"title": "Wrap-Up & Matrix Synthesis", "standard": "MN Standard 8.1.2.2", "bullets": ["Review key differences between literary prose and cinematic storytelling.", "Recognize how medium constraints influence narrative pace and character presentation.", "Prepare matrix observations to inform upcoming thematic essay drafting."], "callout": "Understanding medium adaptations deepens our ability to analyze authorial choices."}
+  ],
+  "resources": {
+    "title": "Media Adaptation & Comparison Kit",
+    "description": "Graphic organizers, text-to-film comparison matrices, and rubric references.",
+    "items": [
+      {
+        "label": "Media Juxtaposition Fillable Matrix PDF",
+        "file": "Media_Juxtaposition_Fillable_Matrix.pdf",
+        "description": "Interactive graphic organizer for logging novel page quotes directly alongside matching film timestamps."
+      },
+      {
+        "label": "Text vs. Film Adaptation Analysis Rubric PDF",
+        "file": "Text_vs_Film_Adaptation_Rubric.pdf",
+        "description": "Criteria for evaluating directorial scene selection, lighting symbolism, and theme preservation."
+      }
+    ]
+  },
+  "form": [
+    {
+      "field_id": 1,
+      "type": "short_answer",
+      "label": "Student Name & Class Period",
+      "placeholder": "e.g., Taylor Swift - Period 2",
+      "required": true
+    },
+    {
+      "field_id": 2,
+      "type": "multiple_choice",
+      "label": "1. Medium Constraints & Internal Monologue (Standard 8.1.7.7)",
+      "subtext": "In S.E. Hinton's novel, readers have continuous access to Ponyboy's poetic inner reflections. When Francis Ford Coppola directed the film adaptation, what primary cinematic challenge did he face regarding Ponyboy's characterization?",
+      "options": [
+        "A) Film cannot use musical scoring, forcing actors to speak every thought aloud.",
+        "B) Film relies on external visual/auditory cues and performance choices, requiring actors to convey internal conflict physically without constant voiceover.",
+        "C) Movie audiences expect long monologues rather than visual action sequences.",
+        "D) Coppola was legally prohibited from using any written dialogue from S.E. Hinton's original manuscript."
+      ],
+      "required": true
+    },
+    {
+      "field_id": 3,
+      "type": "fill_in_blank",
+      "label": "2. Directorial Editing & Subplot Omission",
+      "subtext": "Due to feature film runtime constraints, directors must make choices to cut specific novel subplots. State the primary reason directors omit secondary subplots, and explain how this impacts audience focus.",
+      "placeholder": "Explain runtime limits, narrative pacing, and thematic focus in your own words...",
+      "required": true
+    },
+    {
+      "field_id": 4,
+      "type": "checkbox_group",
+      "label": "3. Visual & Auditory Translation Protocol (Multi-Select)",
+      "subtext": "Select ALL cinematic techniques that directors use to visually translate written descriptive adjectives and literary tone from a novel:",
+      "options": [
+        "Low-angle camera framing to visually establish power dynamics between Socs and Greasers",
+        "Non-diegetic orchestral scoring to evoke immediate emotional empathy during crisis scenes",
+        "Warm golden color palettes and lighting during sunset scenes to symbolize golden innocence",
+        "Displaying printed book pages on screen for the audience to read during quiet moments"
+      ],
+      "required": true
+    },
+    {
+      "field_id": 5,
+      "type": "reflection",
+      "label": "4. Case Study Contrast: The Windrixville Church Rescue",
+      "subtext": "In Hinton's novel, the burning church scene builds on Ponyboy and Johnny's moral transformation through internal thoughts. In Coppola's film adaptation, how do camera pacing, dramatic lighting, and editing shift the audience's emotional focus during this climax?",
+      "placeholder": "Contrast the novel's focus on internal moral realization with the film's emphasis on kinetic physical action, urgent editing, and visual danger...",
+      "required": true
+    },
+    {
+      "field_id": 6,
+      "type": "multiple_choice",
+      "label": "5. Sound Design: Diegetic vs. Non-Diegetic Sound",
+      "subtext": "In film analysis, diegetic sound exists within the story world (heard by characters), while non-diegetic sound is added for the audience. Which scenario represents DIEGETIC sound in 'The Outsiders' movie?",
+      "options": [
+        "A) The swelling orchestral string music playing over Johnny's hospital scene",
+        "B) The sound of a switchblade opening and tires screeching on street gravel during a rumble",
+        "C) The dramatic narrator voiceover added during scene transitions",
+        "D) Text subtitles appearing at the bottom of the screen to translate background dialogue"
+      ],
+      "required": true
+    },
+    {
+      "field_id": 7,
+      "type": "true_false",
+      "label": "6. Adaptation Fidelity Principle",
+      "subtext": "True or False: A film adaptation is only considered successful if it reproduces every single chapter, line of dialogue, and minor character from the original novel without making any artistic alterations.",
+      "required": true
+    },
+    {
+      "field_id": 8,
+      "type": "reflection",
+      "label": "7. Evaluating Voiceover & Literary Poetics",
+      "subtext": "Coppola selectively uses Ponyboy's voiceover narration at key moments (such as reciting Robert Frost's poem 'Nothing Gold Can Stay'). How does preserving Hinton's exact written words through voiceover alter the emotional weight of the visual scene?",
+      "placeholder": "Analyze how hearing Hinton's literary prose spoken aloud creates a bridge between the novel's poetic tone and the film's visual imagery...",
+      "required": true
+    },
+    {
+      "field_id": 9,
+      "type": "reflection",
+      "label": "8. Core Theme Retention Synthesis (Standard 8.1.2.2)",
+      "subtext": "S.E. Hinton's core message in 'The Outsiders' centers on shared human vulnerability despite rigid social and economic divisions ('Things are rough all over'). Evaluate whether Coppola's film adaptation preserves or weakens this central theme.",
+      "placeholder": "Cite specific evidence from both the text and film (e.g., sunset conversations, hospital scenes, or rumble consequences) to defend your judgment...",
+      "required": true
+    },
+    {
+      "field_id": 10,
+      "type": "select_rubric",
+      "label": "9. Self-Assessment: Media Adaptation Analysis Competency",
+      "subtext": "Assess your current ability to analyze how directorial choices, visual framing, and audio design alter or preserve an author's original literary intent:",
+      "options": [
+        "Level 4 - Master: I can analyze cinematography, sound design, and text-to-film changes while defending complex claims with primary evidence.",
+        "Level 3 - Proficient: I can compare key scene differences between Hinton's novel and Coppola's film and explain how medium alters tone.",
+        "Level 2 - Developing: I can spot plot differences between the book and movie but need guidance linking them to directorial intent.",
+        "Level 1 - Novice: I require support identifying cinematic techniques and comparing written prose with visual scenes."
+      ],
+      "required": true
+    }
+  ]
+}));
 </script>
 </body>
 </html>
